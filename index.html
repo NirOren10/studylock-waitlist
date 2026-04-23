@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StudyLock — Focus together. Stay accountable.</title>
+  <style>
+    :root {
+      --primary: #534AB7;
+      --primary-light: #EEEDFE;
+      --primary-dark: #3C3489;
+      --success: #1D9E75;
+      --warning: #EF9F27;
+      --danger: #E24B4A;
+      --white: #FFFFFF;
+      --black: #0A0A0A;
+      --gray-100: #F5F5F7;
+      --gray-200: #E8E8EC;
+      --gray-300: #C8C8D0;
+      --gray-400: #9898A8;
+      --gray-500: #636375;
+      --gray-600: #404050;
+      --bg: #F5F5F7;
+      --card: #FFFFFF;
+      --border: #E8E8EC;
+      --text: #0A0A0A;
+      --text-secondary: #636375;
+      --text-muted: #9898A8;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Nav ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 56px;
+      background: rgba(245,245,247,0.85);
+      backdrop-filter: saturate(180%) blur(20px);
+      -webkit-backdrop-filter: saturate(180%) blur(20px);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.3px;
+    }
+    .nav-logo span { font-size: 20px; }
+    .nav-cta {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 20px;
+      padding: 8px 20px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .nav-cta:hover { background: var(--primary-dark); }
+
+    /* ── Hero ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 80px 24px 60px;
+      background: linear-gradient(160deg, #0A0A0A 0%, #1a1730 60%, #2d2060 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(83,74,183,0.35) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -60%);
+      pointer-events: none;
+    }
+    .hero-eyebrow {
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary-light);
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.2s forwards;
+    }
+    .hero-lock {
+      font-size: 80px;
+      margin-bottom: 24px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.35s forwards;
+      filter: drop-shadow(0 0 40px rgba(83,74,183,0.6));
+    }
+    .hero-title {
+      font-size: clamp(44px, 8vw, 80px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      line-height: 1.05;
+      color: #fff;
+      margin-bottom: 20px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.5s forwards;
+    }
+    .hero-title em {
+      font-style: normal;
+      background: linear-gradient(135deg, #a89dff, #534AB7);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .hero-sub {
+      font-size: clamp(16px, 2.5vw, 22px);
+      color: rgba(255,255,255,0.6);
+      max-width: 500px;
+      line-height: 1.5;
+      margin-bottom: 48px;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.65s forwards;
+    }
+    .hero-form {
+      display: flex;
+      gap: 10px;
+      max-width: 420px;
+      width: 100%;
+      opacity: 0;
+      animation: fadeUp 0.7s 0.8s forwards;
+    }
+    .hero-input {
+      flex: 1;
+      height: 50px;
+      border-radius: 25px;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      background: rgba(255,255,255,0.08);
+      color: #fff;
+      font-size: 15px;
+      padding: 0 20px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .hero-input::placeholder { color: rgba(255,255,255,0.35); }
+    .hero-input:focus { border-color: var(--primary); }
+    .hero-btn {
+      height: 50px;
+      padding: 0 24px;
+      border-radius: 25px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .hero-btn:hover { background: var(--primary-dark); }
+    .hero-btn:active { transform: scale(0.97); }
+    .hero-count {
+      margin-top: 20px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.4);
+      opacity: 0;
+      animation: fadeUp 0.7s 1s forwards;
+    }
+    .hero-count strong { color: rgba(255,255,255,0.7); }
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      opacity: 0;
+      animation: fadeUp 0.7s 1.2s forwards;
+    }
+    .hero-scroll-hint span {
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.3);
+    }
+    .scroll-arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid rgba(255,255,255,0.3);
+      border-bottom: 2px solid rgba(255,255,255,0.3);
+      transform: rotate(45deg);
+      animation: bounce 1.6s ease-in-out infinite;
+    }
+    @keyframes bounce {
+      0%, 100% { transform: rotate(45deg) translateY(0); }
+      50% { transform: rotate(45deg) translateY(5px); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ── Section label ── */
+    .section-label {
+      text-align: center;
+      padding: 80px 24px 0;
+    }
+    .section-label h2 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      color: var(--text);
+    }
+    .section-label p {
+      font-size: clamp(15px, 2vw, 19px);
+      color: var(--text-secondary);
+      margin-top: 12px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.5;
+    }
+
+    /* ── Scroll Story ── */
+    .scroll-story {
+      /* total height = steps × per-step scroll distance */
+      height: calc(5 * 90vh);
+      position: relative;
+      margin-top: 20px;
+    }
+    .scroll-sticky {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 420px;
+      gap: 0;
+      align-items: center;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* Left text panel */
+    .step-text-side {
+      padding: 0 60px 0 80px;
+      position: relative;
+    }
+    .step-panel {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      padding: 0 60px 0 80px;
+      transform: translateY(calc(-50% + 30px));
+      opacity: 0;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      pointer-events: none;
+    }
+    .step-panel.active {
+      opacity: 1;
+      transform: translateY(-50%);
+      pointer-events: auto;
+    }
+    .step-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary);
+      background: var(--primary-light);
+      border-radius: 20px;
+      padding: 5px 12px;
+      margin-bottom: 16px;
+    }
+    .step-heading {
+      font-size: clamp(30px, 4vw, 48px);
+      font-weight: 800;
+      letter-spacing: -1.5px;
+      line-height: 1.1;
+      color: var(--text);
+      margin-bottom: 16px;
+    }
+    .step-body {
+      font-size: clamp(15px, 1.5vw, 18px);
+      color: var(--text-secondary);
+      line-height: 1.6;
+      max-width: 380px;
+    }
+    .step-pills {
+      margin-top: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .step-pill {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--card);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 16px;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text);
+    }
+    .step-pill span:first-child { font-size: 20px; }
+
+    /* Right phone side */
+    .phone-side {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      padding: 40px 40px 40px 0;
+    }
+    .phone-frame {
+      width: 280px;
+      height: 570px;
+      background: var(--black);
+      border-radius: 46px;
+      padding: 12px;
+      box-shadow:
+        0 0 0 1.5px #333,
+        0 30px 80px rgba(0,0,0,0.45),
+        inset 0 0 0 1px rgba(255,255,255,0.08);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: var(--bg);
+      border-radius: 36px;
+      overflow: hidden;
+      position: relative;
+    }
+    .phone-notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 28px;
+      background: var(--black);
+      border-radius: 20px;
+      z-index: 10;
+    }
+
+    /* Screen contents — one per step */
+    .screen-content {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      padding: 52px 16px 16px;
+      overflow: hidden;
+    }
+    .screen-content.active { opacity: 1; }
+
+    /* ── Screen mock UIs ── */
+
+    /* Step 0 — Welcome */
+    .s0-hero { font-size: 48px; text-align: center; margin: 16px 0 12px; }
+    .s0-title { font-size: 18px; font-weight: 700; text-align: center; color: var(--text); margin-bottom: 6px; }
+    .s0-sub { font-size: 12px; color: var(--text-secondary); text-align: center; margin-bottom: 20px; line-height: 1.4; }
+    .s0-feature { display: flex; align-items: center; gap: 10px; background: var(--card); border-radius: 10px; padding: 10px 12px; margin-bottom: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .s0-feature-icon { font-size: 18px; }
+    .s0-feature-text { font-size: 12px; font-weight: 500; color: var(--text); }
+
+    /* Step 1 — Lobby code */
+    .s1-nav { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .s1-nav-title { font-size: 14px; font-weight: 700; color: var(--text); }
+    .s1-nav-cancel { font-size: 12px; color: var(--danger); }
+    .s1-code-label { font-size: 10px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text-muted); text-align: center; margin-bottom: 8px; }
+    .s1-code-row { display: flex; justify-content: center; gap: 6px; margin-bottom: 12px; }
+    .s1-code-box { width: 36px; height: 44px; background: var(--primary-light); border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .s1-code-char { font-size: 20px; font-weight: 700; color: var(--primary); }
+    .s1-actions { display: flex; justify-content: center; gap: 10px; margin-bottom: 14px; }
+    .s1-action-btn { padding: 5px 12px; border-radius: 20px; border: 1.5px solid var(--border); background: var(--card); font-size: 11px; font-weight: 600; color: var(--primary); }
+    .s1-member-count { font-size: 12px; font-weight: 600; color: var(--text); text-align: center; margin-bottom: 10px; }
+    .s1-member-list { background: var(--card); border-radius: 10px; padding: 10px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .member-row { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); }
+    .member-row:last-child { border-bottom: none; }
+    .avatar { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .member-name { font-size: 12px; font-weight: 500; color: var(--text); flex: 1; }
+    .host-badge { font-size: 10px; font-weight: 600; color: var(--primary); background: var(--primary-light); border-radius: 6px; padding: 2px 6px; }
+    .member-placeholder { display: flex; align-items: center; gap: 8px; padding: 6px 0; border-bottom: 1px solid var(--border); opacity: 0.4; }
+    .placeholder-avatar { width: 28px; height: 28px; border-radius: 50%; background: var(--gray-200); border: 2px dashed var(--gray-300); }
+    .placeholder-name { height: 10px; width: 70px; background: var(--gray-200); border-radius: 5px; }
+    .s1-info { margin-top: 12px; background: var(--primary-light); border-radius: 8px; padding: 8px 10px; font-size: 11px; color: var(--primary-dark); text-align: center; line-height: 1.4; }
+
+    /* Step 2 — Joining animation */
+    .s2-member-count { font-size: 12px; font-weight: 600; color: var(--text); text-align: center; margin-bottom: 10px; }
+    .member-joining { animation: slideIn 0.4s ease forwards; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-10px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Step 3 — Start */
+    .s3-start-btn { background: var(--primary); border-radius: 12px; height: 38px; display: flex; align-items: center; justify-content: center; margin-top: 14px; }
+    .s3-start-text { font-size: 13px; font-weight: 700; color: #fff; }
+
+    /* Step 4 — Active session */
+    .s4-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+    .s4-session-name { font-size: 15px; font-weight: 700; color: var(--text); }
+    .s4-live { font-size: 10px; color: var(--success); margin-top: 3px; }
+    .s4-pill { background: var(--primary-light); border-radius: 20px; padding: 4px 10px; }
+    .s4-pill-text { font-size: 11px; font-weight: 600; color: var(--primary); }
+    .timer-ring-wrap { display: flex; flex-direction: column; align-items: center; margin-bottom: 14px; }
+    .timer-ring-svg { width: 140px; height: 140px; }
+    .timer-ring-sub { font-size: 10px; color: var(--text-muted); margin-top: 4px; }
+    .s4-section-title { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .s4-member-list { background: var(--card); border-radius: 10px; padding: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+
+    /* Step 5 — Vote */
+    .vote-card { background: var(--card); border-radius: 12px; padding: 14px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); margin-top: 8px; }
+    .vote-header { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; }
+    .vote-avatar { width: 32px; height: 32px; border-radius: 50%; background: #3B82F6; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; }
+    .vote-title { font-size: 12px; font-weight: 700; color: var(--text); }
+    .vote-subtitle { font-size: 11px; color: var(--text-secondary); margin-top: 2px; }
+    .vote-reason { background: var(--gray-100); border-radius: 8px; padding: 8px 10px; font-size: 11px; color: var(--text-secondary); margin-bottom: 12px; }
+    .vote-tally { font-size: 11px; color: var(--text-muted); margin-bottom: 10px; text-align: center; }
+    .vote-btns { display: flex; gap: 8px; }
+    .vote-btn-approve { flex: 1; height: 34px; background: var(--success); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: #fff; }
+    .vote-btn-decline { flex: 1; height: 34px; background: var(--gray-100); border-radius: 8px; border: 1.5px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; color: var(--text-secondary); }
+
+    /* Step 6 — Session analytics */
+    .s6-complete-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+    .s6-session-name { font-size: 14px; font-weight: 700; color: var(--text); }
+    .s6-done-badge { background: var(--success); color: #fff; font-size: 10px; font-weight: 700; border-radius: 20px; padding: 3px 8px; }
+    .s6-score-row { display: flex; gap: 8px; margin-bottom: 14px; }
+    .s6-score-card { flex: 1; background: var(--card); border-radius: 10px; padding: 10px; text-align: center; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+    .s6-score-val { font-size: 20px; font-weight: 800; color: var(--primary); letter-spacing: -0.5px; }
+    .s6-score-val.green { color: var(--success); }
+    .s6-score-lbl { font-size: 9px; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .s6-tl-title { font-size: 11px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
+    .s6-tl-member { margin-bottom: 10px; }
+    .s6-tl-header { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+    .s6-tl-name { font-size: 11px; font-weight: 500; color: var(--text); flex: 1; }
+    .s6-tl-score { font-size: 10px; font-weight: 700; color: var(--success); }
+    .s6-bar { display: flex; height: 5px; border-radius: 3px; overflow: hidden; background: var(--gray-200); gap: 1px; }
+    .s6-seg { height: 100%; border-radius: 2px; }
+    .s6-seg.focused { background: var(--success); }
+    .s6-seg.brk { background: var(--warning); }
+    .s6-seg.phone { background: var(--danger); }
+    .s6-tl-labels { display: flex; justify-content: space-between; margin-top: 3px; }
+    .s6-tl-label { font-size: 9px; color: var(--text-muted); }
+    .s6-legend { display: flex; gap: 10px; margin-top: 12px; justify-content: center; }
+    .s6-legend-item { display: flex; align-items: center; gap: 4px; font-size: 9px; color: var(--text-secondary); }
+    .s6-legend-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+    /* Progress dots for steps */
+    .story-dots {
+      position: sticky;
+      bottom: 32px;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+      z-index: 10;
+      pointer-events: none;
+      margin-top: -40px;
+      padding-bottom: 40px;
+    }
+    .story-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--gray-300);
+      transition: width 0.3s, background 0.3s;
+    }
+    .story-dot.active {
+      width: 18px;
+      border-radius: 3px;
+      background: var(--primary);
+    }
+
+    /* ── Features strip ── */
+    .features-strip {
+      background: var(--white);
+      padding: 80px 40px;
+      text-align: center;
+    }
+    .features-strip h2 {
+      font-size: clamp(26px, 4vw, 40px);
+      font-weight: 800;
+      letter-spacing: -1.2px;
+      margin-bottom: 48px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 24px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .feature-card {
+      background: var(--bg);
+      border-radius: 18px;
+      padding: 28px 24px;
+      text-align: left;
+      border: 1.5px solid var(--border);
+    }
+    .feature-icon { font-size: 32px; margin-bottom: 14px; }
+    .feature-title { font-size: 16px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+    .feature-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+    /* ── Waitlist section ── */
+    .waitlist-section {
+      background: linear-gradient(160deg, #0A0A0A 0%, #1a1730 60%, #2d2060 100%);
+      padding: 100px 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .waitlist-section::before {
+      content: '';
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(83,74,183,0.3) 0%, transparent 70%);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+    .waitlist-section > * { position: relative; z-index: 1; }
+    .waitlist-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--primary-light);
+      background: rgba(83,74,183,0.25);
+      border-radius: 20px;
+      padding: 6px 14px;
+      margin-bottom: 20px;
+    }
+    .waitlist-title {
+      font-size: clamp(32px, 6vw, 60px);
+      font-weight: 800;
+      letter-spacing: -2px;
+      color: #fff;
+      margin-bottom: 16px;
+      line-height: 1.1;
+    }
+    .waitlist-sub {
+      font-size: clamp(15px, 2vw, 19px);
+      color: rgba(255,255,255,0.55);
+      max-width: 440px;
+      margin: 0 auto 48px;
+      line-height: 1.5;
+    }
+    .waitlist-form-wrap {
+      max-width: 440px;
+      margin: 0 auto;
+    }
+    .waitlist-row {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+    .waitlist-input {
+      width: 100%;
+      height: 52px;
+      border-radius: 14px;
+      border: 1.5px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.07);
+      color: #fff;
+      font-size: 15px;
+      padding: 0 18px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .waitlist-input::placeholder { color: rgba(255,255,255,0.3); }
+    .waitlist-input:focus { border-color: var(--primary); }
+    .waitlist-submit {
+      width: 100%;
+      height: 52px;
+      border-radius: 14px;
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.1s;
+    }
+    .waitlist-submit:hover { background: var(--primary-dark); }
+    .waitlist-submit:active { transform: scale(0.98); }
+    .waitlist-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .waitlist-msg {
+      font-size: 14px;
+      margin-top: 14px;
+      min-height: 20px;
+    }
+    .waitlist-msg.success { color: #6ee7b7; }
+    .waitlist-msg.error { color: #fca5a5; }
+    .waitlist-privacy {
+      margin-top: 16px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* ── Footer ── */
+    footer {
+      background: var(--black);
+      padding: 40px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-logo {
+      font-size: 15px;
+      font-weight: 700;
+      color: rgba(255,255,255,0.6);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .footer-copy {
+      font-size: 12px;
+      color: rgba(255,255,255,0.25);
+    }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%) translateY(80px);
+      background: var(--black);
+      color: #fff;
+      padding: 14px 24px;
+      border-radius: 14px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      z-index: 999;
+      transition: transform 0.4s cubic-bezier(0.34,1.56,0.64,1);
+      white-space: nowrap;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+    .toast.success-toast { background: #064e3b; }
+    .toast.error-toast { background: #7f1d1d; }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      nav { padding: 0 20px; }
+      .scroll-sticky { grid-template-columns: 1fr; grid-template-rows: 1fr 1fr; }
+      .phone-side { height: 50vh; padding: 20px; justify-content: center; }
+      .phone-frame { width: 200px; height: 400px; }
+      .step-panel { padding: 0 20px; text-align: center; }
+      .step-body { margin: 0 auto; }
+      .step-text-side { height: 50vh; }
+      .features-strip { padding: 60px 20px; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="nav-logo"><span>🔒</span> StudyLock</div>
+    <button class="nav-cta" onclick="document.querySelector('.waitlist-section').scrollIntoView({behavior:'smooth'})">
+      Join waitlist
+    </button>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <p class="hero-eyebrow">Coming soon</p>
+    <div class="hero-lock">🔒</div>
+    <h1 class="hero-title">Focus together.<br><em>Stay accountable.</em></h1>
+    <p class="hero-sub">StudyLock keeps your whole study group locked in — together. Real accountability, built in.</p>
+    <form class="hero-form" id="hero-form">
+      <input class="hero-input" type="email" placeholder="your@email.com" required id="hero-email" />
+      <button class="hero-btn" type="submit">Get early access</button>
+    </form>
+    <p class="hero-count" id="hero-count">Be the first to know when we launch</p>
+    <div class="hero-scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- Section heading -->
+  <div class="section-label">
+    <h2>How it works</h2>
+    <p>From creating a room to finishing your session — here's every step.</p>
+  </div>
+
+  <!-- Scroll Story -->
+  <div class="scroll-story" id="scroll-story">
+    <div class="scroll-sticky" id="scroll-sticky">
+
+      <!-- Left: step text panels -->
+      <div class="step-text-side">
+
+        <!-- Step 0 -->
+        <div class="step-panel active" data-step="0">
+          <div class="step-tag">Overview</div>
+          <h2 class="step-heading">Study together.<br>Stay focused.</h2>
+          <p class="step-body">StudyLock is a social focus app that locks everyone in together — no distractions, full accountability.</p>
+          <div class="step-pills">
+            <div class="step-pill"><span>👥</span><span>Create a room and invite friends</span></div>
+            <div class="step-pill"><span>⏱️</span><span>Lock in together and track focus time</span></div>
+            <div class="step-pill"><span>🗳️</span><span>Vote on breaks — accountability built in</span></div>
+          </div>
+        </div>
+
+        <!-- Step 1 -->
+        <div class="step-panel" data-step="1">
+          <div class="step-tag">Step 1</div>
+          <h2 class="step-heading">Create a room<br>and invite.</h2>
+          <p class="step-body">Tap "New session", name it, and share the code. Watch your friends appear in the lobby in real time as they join.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="step-panel" data-step="2">
+          <div class="step-tag">Step 2</div>
+          <h2 class="step-heading">Focus together</h2>
+          <p class="step-body">The countdown runs for all members simultaneously. You can see everyone's focus time — a live leaderboard of discipline.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="step-panel" data-step="3">
+          <div class="step-tag">Step 3</div>
+          <h2 class="step-heading">Breaks need a vote</h2>
+          <p class="step-body">Someone needs a quick break? They request it, and the whole group votes. Majority rules — no solo bailing.</p>
+        </div>
+
+        <!-- Step 6 -->
+        <div class="step-panel" data-step="4">
+          <div class="step-tag">Done 🎉</div>
+          <h2 class="step-heading">See how<br>everyone did.</h2>
+          <p class="step-body">At the end of every session, see each member's focus timeline — focused time, phone usage, and breaks all visualized together.</p>
+          <div class="step-pills">
+            <div class="step-pill"><span>📊</span><span>Per-member focus timelines</span></div>
+            <div class="step-pill"><span>🏆</span><span>Focus scores tracked over time</span></div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right: phone mockup -->
+      <div class="phone-side">
+        <div class="phone-frame">
+          <div class="phone-notch"></div>
+          <div class="phone-screen">
+
+            <!-- Screen 0 — Welcome -->
+            <div class="screen-content active" data-screen="0">
+              <div class="s0-hero">🔒</div>
+              <div class="s0-title">How StudyLock works</div>
+              <div class="s0-sub">A quick walkthrough before your first session.</div>
+              <div class="s0-feature">
+                <span class="s0-feature-icon">👥</span>
+                <span class="s0-feature-text">Create a room and invite friends</span>
+              </div>
+              <div class="s0-feature">
+                <span class="s0-feature-icon">⏱️</span>
+                <span class="s0-feature-text">Lock in together and track focus time</span>
+              </div>
+              <div class="s0-feature">
+                <span class="s0-feature-icon">🗳️</span>
+                <span class="s0-feature-text">Vote on breaks — accountability built in</span>
+              </div>
+            </div>
+
+            <!-- Screen 1 — Friends joining -->
+            <div class="screen-content" data-screen="2">
+              <div class="s1-nav">
+                <span class="s1-nav-cancel">Cancel</span>
+                <span class="s1-nav-title">Study Sprint</span>
+                <span style="width:48px"></span>
+              </div>
+              <div class="s1-code-label">Room code</div>
+              <div class="s1-code-row">
+                <div class="s1-code-box"><span class="s1-code-char">R</span></div>
+                <div class="s1-code-box"><span class="s1-code-char">X</span></div>
+                <div class="s1-code-box"><span class="s1-code-char">3</span></div>
+                <div class="s1-code-box"><span class="s1-code-char">U</span></div>
+                <div class="s1-code-box"><span class="s1-code-char">9</span></div>
+              </div>
+              <div class="s1-member-count" id="s2-count">Members joined: 1 / 4</div>
+              <div class="s1-member-list" id="s2-member-list">
+                <div class="member-row">
+                  <div class="avatar" style="background:#534AB7">Y</div>
+                  <span class="member-name">You</span>
+                  <span class="host-badge">Host</span>
+                </div>
+                <div class="member-placeholder">
+                  <div class="placeholder-avatar"></div>
+                  <div class="placeholder-name"></div>
+                </div>
+                <div class="member-placeholder">
+                  <div class="placeholder-avatar"></div>
+                  <div class="placeholder-name"></div>
+                </div>
+                <div class="member-placeholder">
+                  <div class="placeholder-avatar"></div>
+                  <div class="placeholder-name"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screen 2 — Active timer -->
+            <div class="screen-content" data-screen="4">
+              <div class="s4-header">
+                <div>
+                  <div class="s4-session-name">Study Sprint</div>
+                  <div class="s4-live" id="s4-live">🟢 Live · 4 locked in</div>
+                </div>
+                <div class="s4-pill"><span class="s4-pill-text">60m</span></div>
+              </div>
+              <div class="timer-ring-wrap">
+                <svg class="timer-ring-svg" viewBox="0 0 140 140">
+                  <circle cx="70" cy="70" r="58" fill="none" stroke="#E8E8EC" stroke-width="10"/>
+                  <circle id="timer-arc" cx="70" cy="70" r="58" fill="none" stroke="#534AB7" stroke-width="10"
+                    stroke-dasharray="364" stroke-dashoffset="91"
+                    stroke-linecap="round"
+                    transform="rotate(-90 70 70)"/>
+                  <text id="timer-text" x="70" y="65" text-anchor="middle" font-size="22" font-weight="800" fill="#0A0A0A" font-family="-apple-system,sans-serif">45:00</text>
+                  <text x="70" y="82" text-anchor="middle" font-size="9" fill="#9898A8" font-family="-apple-system,sans-serif">remaining</text>
+                </svg>
+                <div class="timer-ring-sub" id="s4-elapsed">Started 15 min ago</div>
+              </div>
+              <div class="s4-section-title">Members</div>
+              <div class="s4-member-list">
+                <div class="member-row">
+                  <div class="avatar" style="background:#534AB7">Y</div>
+                  <span class="member-name">You</span>
+                  <span style="font-size:10px;color:#9898A8">2 min phone</span>
+                </div>
+                <div class="member-row">
+                  <div class="avatar" style="background:#3B82F6">A</div>
+                  <span class="member-name">Alex</span>
+                  <span style="font-size:10px;color:#1D9E75">🔒 focused</span>
+                </div>
+                <div class="member-row">
+                  <div class="avatar" style="background:#1D9E75">S</div>
+                  <span class="member-name">Sam</span>
+                  <span style="font-size:10px;color:#9898A8">1 min phone</span>
+                </div>
+                <div class="member-row">
+                  <div class="avatar" style="background:#EF9F27">J</div>
+                  <span class="member-name">Jordan</span>
+                  <span style="font-size:10px;color:#1D9E75">🔒 focused</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screen 5 — Vote card -->
+            <div class="screen-content" data-screen="5">
+              <div style="background:var(--primary-light);border-radius:8px;padding:8px 10px;margin-bottom:10px;font-size:11px;color:var(--primary);">
+                🗳️ Vote to approve or decline. Majority rules.
+              </div>
+              <div class="vote-card">
+                <div class="vote-header">
+                  <div class="vote-avatar">A</div>
+                  <div>
+                    <div class="vote-title">Alex wants a break</div>
+                    <div class="vote-subtitle">5-minute break request</div>
+                  </div>
+                </div>
+                <div class="vote-reason">"Need a quick bathroom break"</div>
+                <div class="vote-tally">1 yes · 0 no · 2 pending</div>
+                <div class="vote-btns">
+                  <div class="vote-btn-approve">✓ Approve</div>
+                  <div class="vote-btn-decline">✕ Decline</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Screen 6 — Session analytics -->
+            <div class="screen-content" data-screen="6">
+              <div class="s6-complete-row">
+                <div class="s6-session-name">Study Sprint</div>
+                <div class="s6-done-badge">✓ Complete</div>
+              </div>
+              <div class="s6-score-row">
+                <div class="s6-score-card">
+                  <div class="s6-score-val green">92</div>
+                  <div class="s6-score-lbl">Focus score</div>
+                </div>
+                <div class="s6-score-card">
+                  <div class="s6-score-val">60m</div>
+                  <div class="s6-score-lbl">Duration</div>
+                </div>
+                <div class="s6-score-card">
+                  <div class="s6-score-val">4</div>
+                  <div class="s6-score-lbl">Members</div>
+                </div>
+              </div>
+              <div class="s6-tl-title">Session timeline</div>
+
+              <!-- You: 38m focused, 5m break, 7m phone -->
+              <div class="s6-tl-member">
+                <div class="s6-tl-header">
+                  <div class="avatar" style="background:#534AB7;width:20px;height:20px;font-size:9px;">Y</div>
+                  <span class="s6-tl-name">You</span>
+                  <span class="s6-tl-score">87%</span>
+                </div>
+                <div class="s6-bar">
+                  <div class="s6-seg focused" style="flex:38"></div>
+                  <div class="s6-seg brk" style="flex:5"></div>
+                  <div class="s6-seg phone" style="flex:7"></div>
+                  <div class="s6-seg focused" style="flex:10"></div>
+                </div>
+              </div>
+
+              <!-- Alex: 55m focused, 5m phone -->
+              <div class="s6-tl-member">
+                <div class="s6-tl-header">
+                  <div class="avatar" style="background:#3B82F6;width:20px;height:20px;font-size:9px;">A</div>
+                  <span class="s6-tl-name">Alex</span>
+                  <span class="s6-tl-score">97%</span>
+                </div>
+                <div class="s6-bar">
+                  <div class="s6-seg focused" style="flex:55"></div>
+                  <div class="s6-seg phone" style="flex:5"></div>
+                </div>
+              </div>
+
+              <!-- Sam: 42m focused, 8m break, 10m phone -->
+              <div class="s6-tl-member">
+                <div class="s6-tl-header">
+                  <div class="avatar" style="background:#1D9E75;width:20px;height:20px;font-size:9px;">S</div>
+                  <span class="s6-tl-name">Sam</span>
+                  <span class="s6-tl-score">78%</span>
+                </div>
+                <div class="s6-bar">
+                  <div class="s6-seg focused" style="flex:30"></div>
+                  <div class="s6-seg phone" style="flex:5"></div>
+                  <div class="s6-seg focused" style="flex:12"></div>
+                  <div class="s6-seg brk" style="flex:8"></div>
+                  <div class="s6-seg phone" style="flex:5"></div>
+                </div>
+              </div>
+
+              <!-- Jordan: 57m focused, 3m break -->
+              <div class="s6-tl-member">
+                <div class="s6-tl-header">
+                  <div class="avatar" style="background:#EF9F27;width:20px;height:20px;font-size:9px;">J</div>
+                  <span class="s6-tl-name">Jordan</span>
+                  <span class="s6-tl-score">95%</span>
+                </div>
+                <div class="s6-bar">
+                  <div class="s6-seg focused" style="flex:57"></div>
+                  <div class="s6-seg brk" style="flex:3"></div>
+                </div>
+              </div>
+
+              <div class="s6-legend">
+                <div class="s6-legend-item"><div class="s6-legend-dot" style="background:#1D9E75"></div>Focused</div>
+                <div class="s6-legend-item"><div class="s6-legend-dot" style="background:#EF9F27"></div>Break</div>
+                <div class="s6-legend-item"><div class="s6-legend-dot" style="background:#E24B4A"></div>Phone</div>
+              </div>
+            </div>
+
+          </div><!-- phone-screen -->
+        </div><!-- phone-frame -->
+      </div><!-- phone-side -->
+
+    </div><!-- scroll-sticky -->
+  </div><!-- scroll-story -->
+
+  <!-- Progress dots -->
+  <div class="story-dots" id="story-dots">
+    <div class="story-dot active"></div>
+    <div class="story-dot"></div>
+    <div class="story-dot"></div>
+    <div class="story-dot"></div>
+    <div class="story-dot"></div>
+  </div>
+
+  <!-- Features strip -->
+  <section class="features-strip">
+    <h2>Everything you need to stay locked in</h2>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">👥</div>
+        <div class="feature-title">Group sessions</div>
+        <div class="feature-desc">Create a room and invite up to 8 friends with a simple code.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📵</div>
+        <div class="feature-title">App blocking</div>
+        <div class="feature-desc">Distracting apps are automatically blocked for all members the moment the session starts.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🗳️</div>
+        <div class="feature-title">Group accountability</div>
+        <div class="feature-desc">Breaks and early exits require a majority vote from the group. Everyone stays honest.</div>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📊</div>
+        <div class="feature-title">Focus analytics</div>
+        <div class="feature-desc">Track your focus scores over time and see who you study best with.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Waitlist -->
+  <section class="waitlist-section" id="waitlist">
+    <div class="waitlist-tag">Early access</div>
+    <h2 class="waitlist-title">Be the first<br>to lock in.</h2>
+    <p class="waitlist-sub">Join the waitlist and we'll notify you the moment StudyLock is available.</p>
+    <div class="waitlist-form-wrap">
+      <form id="waitlist-form">
+        <div class="waitlist-row">
+          <input class="waitlist-input" type="email" placeholder="your@email.com" id="wl-email" required />
+        </div>
+        <button class="waitlist-submit" type="submit" id="wl-btn">Join the waitlist →</button>
+      </form>
+      <div class="waitlist-msg" id="wl-msg"></div>
+      <p class="waitlist-privacy">No spam, ever. Unsubscribe any time.</p>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo"><span>🔒</span> StudyLock</div>
+    <div class="footer-copy">© 2026 StudyLock. All rights reserved.</div>
+  </footer>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <script>
+    const TOTAL_STEPS = 5;
+
+    // ── Scroll story ──────────────────────────────────────────────────────────
+    const storyEl = document.getElementById('scroll-story');
+    const panels = document.querySelectorAll('.step-panel');
+    const screens = document.querySelectorAll('.screen-content');
+    const dots = document.querySelectorAll('.story-dot');
+    let currentStep = 0;
+
+    function setStep(step) {
+      if (step === currentStep) return;
+      currentStep = step;
+
+      panels.forEach((p, i) => p.classList.toggle('active', i === step));
+      screens.forEach((s, i) => s.classList.toggle('active', i === step));
+      dots.forEach((d, i) => d.classList.toggle('active', i === step));
+
+      if (step === 1) startJoinAnimation();
+      if (step === 2) startLiveTimer();
+    }
+
+    window.addEventListener('scroll', () => {
+      const rect = storyEl.getBoundingClientRect();
+      const totalScroll = storyEl.offsetHeight - window.innerHeight;
+      if (totalScroll <= 0) return;
+      const scrolled = Math.max(0, -rect.top);
+      const progress = Math.min(1, scrolled / totalScroll);
+      const step = Math.min(TOTAL_STEPS - 1, Math.floor(progress * TOTAL_STEPS));
+      setStep(step);
+    }, { passive: true });
+
+    // ── Join animation (step 2) ───────────────────────────────────────────────
+    const BOTS = [
+      { name: 'Alex', color: '#3B82F6', initial: 'A' },
+      { name: 'Sam',  color: '#1D9E75', initial: 'S' },
+      { name: 'Jordan', color: '#EF9F27', initial: 'J' },
+    ];
+    let joinInterval = null;
+
+    function startJoinAnimation() {
+      const list = document.getElementById('s2-member-list');
+      const countEl = document.getElementById('s2-count');
+      // Reset
+      if (joinInterval) clearInterval(joinInterval);
+      list.innerHTML = `
+        <div class="member-row">
+          <div class="avatar" style="background:#534AB7">Y</div>
+          <span class="member-name">You</span>
+          <span class="host-badge">Host</span>
+        </div>
+        <div class="member-placeholder"><div class="placeholder-avatar"></div><div class="placeholder-name"></div></div>
+        <div class="member-placeholder"><div class="placeholder-avatar"></div><div class="placeholder-name"></div></div>
+        <div class="member-placeholder"><div class="placeholder-avatar"></div><div class="placeholder-name"></div></div>
+      `;
+      countEl.textContent = 'Members joined: 1 / 4';
+      let i = 0;
+      joinInterval = setInterval(() => {
+        if (i >= BOTS.length) { clearInterval(joinInterval); return; }
+        const bot = BOTS[i];
+        const placeholders = list.querySelectorAll('.member-placeholder');
+        if (placeholders[0]) {
+          const row = document.createElement('div');
+          row.className = 'member-row member-joining';
+          row.innerHTML = `
+            <div class="avatar" style="background:${bot.color}">${bot.initial}</div>
+            <span class="member-name">${bot.name}</span>
+          `;
+          placeholders[0].replaceWith(row);
+        }
+        i++;
+        countEl.textContent = `Members joined: ${1 + i} / 4`;
+      }, 900);
+    }
+
+    // ── Live session timer (step 4) ───────────────────────────────────────────
+    // Session: 60 min total. Demo starts at 15 min elapsed → 45:00 remaining.
+    // Runs at 8× real-time so the ring visibly moves while the user watches.
+    const TOTAL_SESSION_SECS = 60 * 60;
+    const TIMER_START_ELAPSED = 15 * 60; // 15 min already elapsed
+    const TIMER_SPEED = 1;               // 1 second per tick
+    let timerInterval = null;
+    let timerElapsed = TIMER_START_ELAPSED;
+
+    function startLiveTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerElapsed = TIMER_START_ELAPSED;
+      updateTimerDisplay();
+      timerInterval = setInterval(() => {
+        timerElapsed += TIMER_SPEED;
+        if (timerElapsed >= TOTAL_SESSION_SECS) timerElapsed = TIMER_START_ELAPSED; // loop back
+        updateTimerDisplay();
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const remaining = TOTAL_SESSION_SECS - timerElapsed;
+      const mm = String(Math.floor(remaining / 60)).padStart(2, '0');
+      const ss = String(remaining % 60).padStart(2, '0');
+
+      const textEl = document.getElementById('timer-text');
+      const arcEl = document.getElementById('timer-arc');
+      const elapsedEl = document.getElementById('s4-elapsed');
+      if (!textEl || !arcEl) return;
+
+      textEl.textContent = `${mm}:${ss}`;
+
+      const pct = remaining / TOTAL_SESSION_SECS;          // fraction remaining
+      const circumference = 364;
+      arcEl.setAttribute('stroke-dashoffset', String(Math.round(circumference * (1 - pct))));
+
+      const elapsedMin = Math.round(timerElapsed / 60);
+      if (elapsedEl) elapsedEl.textContent = `Started ${elapsedMin} min ago`;
+    }
+
+    // ── Toast ─────────────────────────────────────────────────────────────────
+    const toastEl = document.getElementById('toast');
+    let toastTimeout = null;
+
+    function showToast(msg, type = '') {
+      toastEl.textContent = msg;
+      toastEl.className = 'toast show' + (type ? ' ' + type + '-toast' : '');
+      clearTimeout(toastTimeout);
+      toastTimeout = setTimeout(() => { toastEl.className = 'toast'; }, 3500);
+    }
+
+    // ── Count display ─────────────────────────────────────────────────────────
+    async function loadCount() {
+      try {
+        const r = await fetch('/api/count');
+        const { count } = await r.json();
+        const el = document.getElementById('hero-count');
+        if (count > 0) {
+          el.innerHTML = `<strong>${count} ${count === 1 ? 'person' : 'people'}</strong> already joined`;
+        }
+      } catch {}
+    }
+    loadCount();
+
+    // ── Shared signup logic ───────────────────────────────────────────────────
+    async function submitEmail(email, btnEl, msgEl) {
+      btnEl.disabled = true;
+      const originalText = btnEl.textContent;
+      btnEl.textContent = 'Joining…';
+      if (msgEl) { msgEl.className = 'waitlist-msg'; msgEl.textContent = ''; }
+
+      try {
+        const r = await fetch('/api/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email }),
+        });
+        const data = await r.json();
+        if (r.ok) {
+          if (msgEl) { msgEl.className = 'waitlist-msg success'; msgEl.textContent = `🎉 ${data.message}`; }
+          showToast(`You're on the list!`, 'success');
+          loadCount();
+          return true;
+        } else {
+          if (msgEl) { msgEl.className = 'waitlist-msg error'; msgEl.textContent = data.error || 'Something went wrong.'; }
+          showToast(data.error || 'Something went wrong.', 'error');
+        }
+      } catch {
+        if (msgEl) { msgEl.className = 'waitlist-msg error'; msgEl.textContent = 'Could not connect. Try again.'; }
+        showToast('Could not connect. Try again.', 'error');
+      }
+
+      btnEl.disabled = false;
+      btnEl.textContent = originalText;
+      return false;
+    }
+
+    // ── Hero form ─────────────────────────────────────────────────────────────
+    document.getElementById('hero-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('hero-email').value.trim();
+      if (!email) return;
+      const btn = e.target.querySelector('button');
+      const ok = await submitEmail(email, btn, null);
+      if (ok) { e.target.reset(); btn.textContent = '✓ You\'re on the list!'; }
+    });
+
+    // ── Waitlist form ─────────────────────────────────────────────────────────
+    document.getElementById('waitlist-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('wl-email').value.trim();
+      const btn = document.getElementById('wl-btn');
+      const msg = document.getElementById('wl-msg');
+      const ok = await submitEmail(email, btn, msg);
+      if (ok) { e.target.reset(); }
+    });
+
+    // ── Nav CTA scroll ────────────────────────────────────────────────────────
+    document.querySelector('.nav-cta').addEventListener('click', () => {
+      document.getElementById('waitlist').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
+</html>
