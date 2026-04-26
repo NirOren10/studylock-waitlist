@@ -1,7 +1,7 @@
 {
-  "name": "studylock-waitlist",
+  "name": "StudyGroup-waitlist",
   "version": "1.0.0",
-  "description": "StudyLock waitlist website",
+  "description": "StudyGroup waitlist website",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",

@@ -57,5 +57,5 @@ app.get('/admin', (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`StudyLock waitlist running at http://localhost:${PORT}`);
+  console.log(`StudyGroup waitlist running at http://localhost:${PORT}`);
 });

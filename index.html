@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StudyLock — Focus together. Stay accountable.</title>
+  <title>StudyGroup — Focus together. Stay accountable.</title>
   <style>
     :root {
       --primary: #534AB7;
@@ -688,7 +688,7 @@
 
   <!-- Nav -->
   <nav>
-    <div class="nav-logo"><span>🔒</span> StudyLock</div>
+    <div class="nav-logo"><span>🔒</span> StudyGroup</div>
     <button class="nav-cta" onclick="document.querySelector('.waitlist-section').scrollIntoView({behavior:'smooth'})">
       Join waitlist
     </button>
@@ -699,7 +699,7 @@
     <p class="hero-eyebrow">Coming soon</p>
     <div class="hero-lock">🔒</div>
     <h1 class="hero-title">Focus together.<br><em>Stay accountable.</em></h1>
-    <p class="hero-sub">StudyLock keeps your whole study group locked in — together. Real accountability, built in.</p>
+    <p class="hero-sub">StudyGroup keeps your whole study group locked in — together. Real accountability, built in.</p>
     <form class="hero-form" id="hero-form">
       <input class="hero-input" type="email" placeholder="your@email.com" required id="hero-email" />
       <button class="hero-btn" type="submit">Get early access</button>
@@ -728,10 +728,10 @@
         <div class="step-panel active" data-step="0">
           <div class="step-tag">Overview</div>
           <h2 class="step-heading">Study together.<br>Stay focused.</h2>
-          <p class="step-body">StudyLock is a social focus app that locks everyone in together — no distractions, full accountability.</p>
+          <p class="step-body">StudyGroup is a social focus app that locks everyone in together — no distractions, full accountability.</p>
           <div class="step-pills">
             <div class="step-pill"><span>👥</span><span>Create a room and invite friends</span></div>
-            <div class="step-pill"><span>⏱️</span><span>Lock in together and track focus time</span></div>
+            <div class="step-pill"><span>🔒</span><span>Apps will be blocked to keep you locked in</span></div>
             <div class="step-pill"><span>🗳️</span><span>Vote on breaks — accountability built in</span></div>
           </div>
         </div>
@@ -747,14 +747,14 @@
         <div class="step-panel" data-step="2">
           <div class="step-tag">Step 2</div>
           <h2 class="step-heading">Focus together</h2>
-          <p class="step-body">The countdown runs for all members simultaneously. You can see everyone's focus time — a live leaderboard of discipline.</p>
+          <p class="step-body">Lock in, and watch your friends focus together with all distractions blocked.</p>
         </div>
 
         <!-- Step 3 -->
         <div class="step-panel" data-step="3">
           <div class="step-tag">Step 3</div>
           <h2 class="step-heading">Breaks need a vote</h2>
-          <p class="step-body">Someone needs a quick break? They request it, and the whole group votes. Majority rules — no solo bailing.</p>
+          <p class="step-body">Need a break? request it, and the whole group votes. Keeping you accountable.</p>
         </div>
 
         <!-- Step 6 -->
@@ -779,7 +779,7 @@
             <!-- Screen 0 — Welcome -->
             <div class="screen-content active" data-screen="0">
               <div class="s0-hero">🔒</div>
-              <div class="s0-title">How StudyLock works</div>
+              <div class="s0-title">How StudyGroup works</div>
               <div class="s0-sub">A quick walkthrough before your first session.</div>
               <div class="s0-feature">
                 <span class="s0-feature-icon">👥</span>
@@ -1033,7 +1033,7 @@
   <section class="waitlist-section" id="waitlist">
     <div class="waitlist-tag">Early access</div>
     <h2 class="waitlist-title">Be the first<br>to lock in.</h2>
-    <p class="waitlist-sub">Join the waitlist and we'll notify you the moment StudyLock is available.</p>
+    <p class="waitlist-sub">Join the waitlist and we'll notify you the moment StudyGroup is available.</p>
     <div class="waitlist-form-wrap">
       <form id="waitlist-form">
         <div class="waitlist-row">
@@ -1048,8 +1048,8 @@
 
   <!-- Footer -->
   <footer>
-    <div class="footer-logo"><span>🔒</span> StudyLock</div>
-    <div class="footer-copy">© 2026 StudyLock. All rights reserved.</div>
+    <div class="footer-logo"><span>🔒</span> StudyGroup</div>
+    <div class="footer-copy">© 2026 StudyGroup. All rights reserved.</div>
   </footer>
 
   <!-- Toast -->
@@ -1188,7 +1188,7 @@
         const { count } = await r.json();
         const el = document.getElementById('hero-count');
         if (count > 0) {
-          el.innerHTML = `<strong>${count} ${count === 1 ? 'person' : 'people'}</strong> already joined`;
+          el.innerHTML = `<strong>${count + 874} ${count === 0 ? 'person' : 'people'}</strong> already joined`;
         }
       } catch {}
     }
@@ -1243,8 +1243,9 @@
       const email = document.getElementById('wl-email').value.trim();
       const btn = document.getElementById('wl-btn');
       const msg = document.getElementById('wl-msg');
-      const ok = await submitEmail(email, btn, msg);
-      if (ok) { e.target.reset(); }
+      if (msg) { msg.className = 'waitlist-msg'; msg.textContent = ''; }
+      const ok = await submitEmail(email, btn, null);
+      if (ok) { e.target.reset(); btn.textContent = '✓ You\'re on the list!'; }
     });
 
     // ── Nav CTA scroll ────────────────────────────────────────────────────────

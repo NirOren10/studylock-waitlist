@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>StudyLock — Waitlist Admin</title>
+  <title>StudyGroup — Waitlist Admin</title>
   <style>
     :root {
       --primary: #534AB7;
@@ -132,7 +132,7 @@
 </head>
 <body>
   <header>
-    <div class="logo">🔒 <a href="/">StudyLock</a> <span style="color:#9898A8;font-weight:400">/</span> Waitlist</div>
+    <div class="logo">🔒 <a href="/">StudyGroup</a> <span style="color:#9898A8;font-weight:400">/</span> Waitlist</div>
     <div class="badge" id="count-badge">Loading…</div>
   </header>
   <main>
@@ -229,7 +229,7 @@
       const csv = rows.map(r => r.map(c => `"${c}"`).join(',')).join('\n');
       const a = document.createElement('a');
       a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csv);
-      a.download = 'studylock-waitlist.csv';
+      a.download = 'StudyGroup-waitlist.csv';
       a.click();
     }
 
